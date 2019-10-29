@@ -14,6 +14,7 @@
     let score = 0;
     let miss = 0;
     let startTime;
+    let isPlaying = false;
 
     const target = document.getElementById('target');
     const scoreLabel = document.getElementById('score');
@@ -38,6 +39,7 @@
         }, 10);
 
         if (timeLeft < 0) {
+            isPlaying = false;
             clearTimeout(timeoutId);
             timerLabel.textContent = '0.00';
             setTimeout(() => {
@@ -47,15 +49,20 @@
     }
 
     window.addEventListener('click', () => {
+        if (isPlaying === true) {
+            return;
+        }
+        isPlaying = true;
         target.textContent = word;
         startTime = Date.now();
         updateTimer();
     });
 
     window.addEventListener('keydown', (e) => {
-        console.log(e.key);
+        if (isPlaying !== true) {
+            return;
+        }
         if (e.key === word[loc]) {
-            console.log('score');
             loc++;
             if (loc === word.length) {
                 word = words[Math.floor(Math.random() * words.length)];
